@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     public var b:String="";
     public var number:String="";
     public var result:String="";
+    public var flag_znak:Int=1;
+    public var flag_bkt:Int=0;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +48,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             println(res)
-            println(a.toInt())
             if(result!="Error")
                 if((res.toInt().toString()+".0")==res.toString()){
                     result=res.toInt().toString()
@@ -102,9 +103,6 @@ class MainActivity : AppCompatActivity() {
         textView.setText(str);
     }
     public fun onCalculate(view: View?){
-//        val edit = findViewById(android.R.id.editTextSource) as EditText
-//        val mE1= findViewById<EditText>(android.R.id.EditText);
-//        val edit = findViewById<EditText>(android.R.id.EditText)
         val textView = findViewById<TextView>(R.id.editText);
         val textRes = findViewById<TextView>(R.id.textRes);
 
@@ -123,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                 textView.setText("0");
                 textRes.setText("0");
                 result=""
+                flag_bkt=0;
                 op=""
                 a=""
                 b=""
@@ -363,7 +362,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         println(res)
-                        println(a.toInt())
                         if(result!="Error")
                         if((res.toInt().toString()+".0")==res.toString()){
                             result=res.toInt().toString()
@@ -456,7 +454,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         println(res)
-                        println(a.toInt())
                         if(result!="Error")
                             if((res.toInt().toString()+".0")==res.toString()){
                             result=res.toInt().toString()
@@ -550,7 +547,6 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         println(res)
-                        println(a.toInt())
                         if(result!="Error")
                             if((res.toInt().toString()+".0")==res.toString()){
                             result=res.toInt().toString()
@@ -706,10 +702,11 @@ class MainActivity : AppCompatActivity() {
 
                 var str: String = textView.text.toString()
                 if(b=="") {
-                    a = result
+                    result=a
                     b = ""
                     op = ""
-                    textView.setText(result);
+                    textView.setText(result.toString());
+                    textRes.setText(result.toString());
                 }
                 else{
                     if(a!=""&&b!="") {
@@ -736,12 +733,12 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                         println(res)
-                        println(a.toInt())
                         if(result!="Error")
                         if((res.toInt().toString()+".0")==res.toString()){
                             result=res.toInt().toString()
                         }
                         else result=res.toString()
+                        println("result="+result)
                         textRes.setText(result);
                         b=""
                         a=""
@@ -777,9 +774,9 @@ class MainActivity : AppCompatActivity() {
                         }
                         else
                             result=res.toString()
+                        println("result="+result)
                         textRes.setText(result);
                         number=""
-
                         b=""
                         a=""
                     }
@@ -799,11 +796,34 @@ class MainActivity : AppCompatActivity() {
 //                }
 //                textView.setText(str);
             }
-            if(view.getId()==R.id.button_per){
-//                    if(op==""){
-//                        println("9")
-////                        res
+
+            if(view.getId()==R.id.button_plusorminus) {
+                if(op==""){
+                    a=(a.toDouble()*(-1)).toString()
+                    val res=a;
+                    println("a="+a)
+//                    if((a.toInt().toString()+".0")==a.toDouble().toString()){
+//                        result=a.toInt().toString()
 //                    }
+//                    else
+                        result=res.toString()
+                    textView.setText(result.toString())
+                }
+                else{
+                    if(a!=""&&b!=""){
+                        if(op=="+"){
+                            op="-"
+                        }
+                        else if(op=="-"){
+                            op="+"
+                        }
+                        else b=(b.toDouble() * (-1)).toString()
+                        flag_znak*=(-1);
+
+                    }
+                }
+            }
+            if(view.getId()==R.id.button_per){
                 var str: String = textView.text.toString()
 
                 str+="%"
@@ -817,6 +837,34 @@ class MainActivity : AppCompatActivity() {
                     b=(b.toDouble()/100.0).toString()
                     println("b="+b)
                 }
+            }
+            if(view.getId()==R.id.button_bkt){
+                var str: String = textView.text.toString()
+                if(str!="0") {
+                    if (flag_bkt == 0) {
+                        str += "(";
+                        flag_bkt = 1;
+                    } else {
+                        str += ")";
+                        flag_bkt = 0;
+                    }
+                }
+                else{
+                    if (flag_bkt == 0) {
+                        str = "(";
+                        flag_bkt = 1;
+                    } else {
+                        str = ")";
+                        flag_bkt = 0;
+                    }
+                }
+                textView.setText(str);
+            }
+            if(view.getId()==R.id.button_clear) {
+                var str: String = textView.text.toString()
+                val t=str.substring(0,str.count()-1);
+                textView.setText(t);
+
             }
         }
     }
